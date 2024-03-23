@@ -38,7 +38,7 @@ The SDN enforces the following firewall rules to manage and secure network traff
 
 ## Firewall Testing Procedures
 
-The functionality of the firewall is tested using `pingall` for ICMP traffic verification and `iperf` with the `-u` option for UDP traffic. This ensures that the traffic adheres to the defined rules, particularly in relation to `webServer`, `examServer`, and `dnsServer`.
+The functionality of the firewall is tested using `pingall` for ICMP traffic verification or `iperfudp` for UDP traffic. This ensures that the traffic adheres to the defined rules, particularly in relation to `webServer`, `examServer`, and `dnsServer`.
 
 
 ## SDN1 Goal
