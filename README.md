@@ -1,11 +1,7 @@
 # openflow-pox-controllers
-Python3 Openflow POX controller with Mininet topologies. POX documentation from https://github.com/noxrepo/pox. Custom topology and firewall files can be found in pox/pox/sdn0 and pox/pox/sdn1. Description found in pox/SDN1-Description.pdf
+Python3 Openflow POX controller with Mininet topologies. POX documentation from https://github.com/noxrepo/pox. Custom topology and firewall files can be found in pox/pox/sdn0 and pox/pox/sdn1. Descriptions can found in pox/SDN0-Description.pdf and pox/SDN1-Description.pdf.
 
-## SDN1 Goal
-
-The primary goal of this SDN is to control and manage network traffic between various devices in the network topology without using flooding techniques (specifically forbidding the use of `of.OFPP_FLOOD`). Traffic is directed based on subnet specifications, ensuring specific ports are used for all communications. This approach necessitates a method to validate whether an IP address belongs to a given subnet, based on predefined network topology rules.
-
-### Naming Conventions
+## Naming Conventions for both SDNs
 
 For consistency, the following naming conventions are used:
 
@@ -15,7 +11,42 @@ For consistency, the following naming conventions are used:
 - **Other Devices:** `printer`
 - **Switches:** `s1`, `s2`, `s3`, `s4`, `s5`
 
-## SDN1 Topology Rules
+## Network Topology
+
+Utilizing Mininet for network simulation and the POX controller for network programmability, both SDNs operate according to the OpenFlow 1.3 standard, facilitating efficient packet routing between switches and controllers.
+
+## SDN0 Goal
+
+This program is designed to manage traffic within a software-defined network (SDN) with a firewall, ensuring that data packets are routed according to predefined rules. Therefore, it establishes control over the flow of network traffic through software.
+
+## SDN0 Rules - Firewall
+
+The SDN enforces the following firewall rules to manage and secure network traffic:
+
+- **Rule 1**: All ARP traffic is unrestricted across the network.
+- **Rule 2**: ICMP packets are permitted unless they are directed to or from the `dnsServer`.
+- **Rule 3**: TCP connections to and from the `webServer` are authorized for specific hosts including `facultyWS`, `facultyPC`, `labWS`, `studentPC`, `itWS`, `trustedPC`, and `guestPC`.
+- **Rule 4**: TCP traffic to `examServer` is exclusively permitted from `facultyWS` and `facultyPC`, and vice versa.
+- **Rule 5**: Inter-host TCP and UDP traffic among `facultyWS`, `facultyPC`, `labWS`, `studentPC`, `itWS`, and `itPC` is allowed.
+- **Rule 6**: All UDP traffic to and from `dnsServer` is accepted.
+- **Default Rule**: Any other traffic not explicitly mentioned above is to be dropped.
+
+## Implementation of Firewall Rules
+
+ - A function `do_firewall(src, dst, protocol)` is outlined in pseudocode to apply the aforementioned firewall rules effectively.
+ - Network flow is managed via OpenFlow messages such as `Packet_In`, `Packet_Out`, and `Flow_Mod`, which adjust flow tables and guide packet traffic within the network.
+
+## Firewall Testing Procedures
+
+The functionality of the firewall is tested using `pingall` for ICMP traffic verification and `iperf` with the `-u` option for UDP traffic. This ensures that the traffic adheres to the defined rules, particularly in relation to `webServer`, `examServer`, and `dnsServer`.
+
+
+## SDN1 Goal
+
+The primary goal of this SDN is to control and manage network traffic between various devices in the network topology without using flooding techniques (specifically forbidding the use of `of.OFPP_FLOOD`). Traffic is directed based on subnet specifications, ensuring specific ports are used for all communications. This approach necessitates a method to validate whether an IP address belongs to a given subnet, based on predefined network topology rules.
+
+
+## SDN1 Rules
 
 The implementation must adhere to the following rules, directing traffic based on subnet affiliations:
 
